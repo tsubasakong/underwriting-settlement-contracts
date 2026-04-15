@@ -55,3 +55,22 @@ Those names are intentionally workflow-scoped, so the package does not read like
 ## Tooling
 
 This repo is bootstrapped as a Foundry project with `contracts/` as the source root.
+
+## Getting Started
+
+This repository uses Foundry git submodules for external libraries.
+
+Fresh clone setup:
+
+```bash
+git clone --recurse-submodules https://github.com/tsubasakong/underwriting-settlement-contracts.git
+cd underwriting-settlement-contracts
+forge build
+```
+
+If the repo was already cloned without submodules:
+
+```bash
+git submodule update --init --recursive
+forge build
+```
