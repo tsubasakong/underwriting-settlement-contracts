@@ -29,7 +29,24 @@ Keep in this repository:
 - recovery and replacement behavior for close flows
 - multi-stage documentation and end-to-end workflow tests
 
-## Initial Layout
+## Current Package
+
+This repository now includes an implemented workflow package under:
+
+```text
+contracts/workflows/two-stage-underwriting/
+```
+
+Main contracts:
+- `TwoStageUnderwritingHook.sol`
+- `TwoStageUnderwritingWorkflowCore.sol`
+- `TwoStageUnderwritingEvaluator.sol`
+- `TwoStageUnderwritingCoordinator.sol`
+- `TwoStageUnderwritingTypes.sol`
+
+The names stay intentionally workflow-scoped so the package does not read like a generic hook lego block.
+
+## Repo Layout
 
 ```text
 contracts/
@@ -41,20 +58,29 @@ docs/
 test/
 ```
 
-## Planned First Workflow Package
+## Implemented Flow
 
-The initial extraction target is a two-stage underwriting package with names along these lines:
+The current package models a two-stage parent/close underwriting workflow:
+- a root job commits underwriting terms and may opt into a later close stage
+- a coordinator promotes funded jobs from `FeeEscrowed` to `Protected`
+- provider submission must match the committed evidence hashes
+- an underwriter-signed evaluator relay finalizes submitted jobs via `complete` / `reject`
+- while a job is still `Open`, the configured client may still reject it directly
+- a successful root job can move into `AwaitingClose`
+- one active close job may be admitted at a time, with replacement after terminal close outcomes
 
-- `TwoStageUnderwritingHook.sol`
-- `TwoStageUnderwritingWorkflowCore.sol`
-- `TwoStageUnderwritingCoordinator.sol`
-- `TwoStageUnderwritingTypes.sol`
-
-Those names are intentionally workflow-scoped, so the package does not read like a generic lego block.
+The detailed sequence is documented in [docs/workflows/two-stage-underwriting.md](./docs/workflows/two-stage-underwriting.md).
 
 ## Tooling
 
 This repo is bootstrapped as a Foundry project with `contracts/` as the source root.
+
+Primary commands:
+
+```bash
+forge build
+forge test
+```
 
 ## Getting Started
 
